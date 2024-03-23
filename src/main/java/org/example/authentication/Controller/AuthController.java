@@ -76,4 +76,17 @@ public class AuthController {
         userRepository.save(user);
         return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
     }
+
+    @GetMapping("/username")
+    public ResponseEntity<String> getUsernameFromToken(Authentication authentication) {
+        return ResponseEntity.ok(authentication.getName());
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<String> validateToken(@RequestHeader("Authorization") String token) {
+        if(jwtGenerator.validateToken(token.substring(7))) {
+            return ResponseEntity.ok("Token is valid");
+        }
+        return ResponseEntity.badRequest().body("Invalid token");
+    }
 }
